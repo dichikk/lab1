@@ -20,7 +20,7 @@ TEST(test_create_int_array)
         assert(get_int_by_index(arr, 2, &value) && value == 3);
         assert(get_int_by_index(arr, 3, &value) && value == 4);
         assert(get_int_by_index(arr, 4, &value) && value == 5);
-        assert(get_type(arr) == int_arr_type);
+        assert(get_operations(arr) == get_int_operations());
         free_array(arr);
     }
     
@@ -55,7 +55,7 @@ TEST(test_create_complex_array)
         assert(get_complex_by_index(arr, 0, &value) && value.real == 1.0 && value.imag == 2.0);
         assert(get_complex_by_index(arr, 1, &value) && value.real == 3.0 && value.imag == 4.0);
         assert(get_complex_by_index(arr, 2, &value) && value.real == 5.0 && value.imag == 6.0);
-        assert(get_type(arr) == complex_arr_type);
+        assert(get_operations(arr) == get_complex_operations());
         free_array(arr);
     }
     
@@ -425,6 +425,74 @@ TEST(test_memory_leak_where)
         assert(result != NULL);
         free_array(arr);
         free_array(result);
+    }
+}
+
+TEST(test_int_resize)
+{
+    {
+        int data[] = {1, 2, 3};
+        poly_arr* arr = create_int_array(data, 3);
+        assert(arr != NULL);
+        resize(arr, 5);
+        assert(get_length(arr) == 5);
+        int value;
+        assert(get_int_by_index(arr, 0, &value) && value == 1);
+        assert(get_int_by_index(arr, 1, &value) && value == 2);
+        assert(get_int_by_index(arr, 2, &value) && value == 3);
+        assert(get_int_by_index(arr, 3, &value) && value == 0); 
+        assert(get_int_by_index(arr, 4, &value) && value == 0); 
+        free_array(arr);
+    }
+
+    {
+        int data[] = {10, 20, 30, 40, 50};
+        poly_arr* arr = create_int_array(data, 5);
+        assert(arr != NULL);
+        resize(arr, 2);
+        assert(get_length(arr) == 2);
+        int value;
+        assert(get_int_by_index(arr, 0, &value) && value == 10);
+        assert(get_int_by_index(arr, 1, &value) && value == 20);
+        assert(!get_int_by_index(arr, 2, &value));
+        free_array(arr);
+    }
+
+    {
+        int data[] = {1, 2};
+        poly_arr* arr = create_int_array(data, 2);
+        resize(arr, 0);
+        assert(get_length(arr) == 0);
+        free_array(arr);
+    }
+}
+
+TEST(test_complex_resize)
+{
+    {
+        complex_num data[] = {{1.0, 1.0}, {2.0, 2.0}};
+        poly_arr* arr = create_complex_array(data, 2);
+        assert(arr != NULL);
+        resize(arr, 4);
+        assert(get_length(arr) == 4);
+        complex_num value;
+        assert(get_complex_by_index(arr, 0, &value) && value.real == 1.0 && value.imag == 1.0);
+        assert(get_complex_by_index(arr, 1, &value) && value.real == 2.0 && value.imag == 2.0);
+        assert(get_complex_by_index(arr, 2, &value) && value.real == 0.0 && value.imag == 0.0);
+        assert(get_complex_by_index(arr, 3, &value) && value.real == 0.0 && value.imag == 0.0);
+        free_array(arr);
+    }
+
+    {
+        complex_num data[] = {{1.0, 1.0}, {2.0, 2.0}, {3.0, 3.0}};
+        poly_arr* arr = create_complex_array(data, 3);
+        assert(arr != NULL);
+        resize(arr, 1);
+        assert(get_length(arr) == 1);
+        complex_num value;
+        assert(get_complex_by_index(arr, 0, &value) && value.real == 1.0 && value.imag == 1.0);
+        assert(!get_complex_by_index(arr, 1, &value));
+        free_array(arr);
     }
 }
 

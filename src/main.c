@@ -132,7 +132,7 @@ int main(void)
             if (!read_index(&index1, count, "Первый массив: ")) continue;
             if (!read_index(&index2, count, "Второй массив: ")) continue;
             poly_arr *arr1 = arr_storage[index1 - 1], *arr2 = arr_storage[index2 - 1];
-            if (get_type(arr1) != get_type(arr2))
+            if (get_operations(arr1) != get_operations(arr2))
             {
                 printf("Типы массивов не совпадают\n");
             } 
@@ -153,7 +153,7 @@ int main(void)
             poly_arr* arr = arr_storage[index - 1];
             poly_arr* result = NULL;
             int operation_num;
-            if (get_type(arr) == int_arr_type)
+            if (get_operations(arr) == get_int_operations())
             {
                 printf("1. Квадрат  2. Модуль\nВыбор: ");
                 if (scanf("%d", &operation_num) != 1)
@@ -190,7 +190,7 @@ int main(void)
             poly_arr* arr = arr_storage[index - 1];
             poly_arr* result = NULL;
             int predicate_num;
-            if (get_type(arr) == int_arr_type)
+            if (get_operations(arr) == get_int_operations())
             {
                 printf("1. Чётные  2. Положительные\nВыбор: ");
                 if (scanf("%d", &predicate_num) != 1)
